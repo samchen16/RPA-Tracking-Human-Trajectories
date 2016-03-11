@@ -44,6 +44,7 @@ private slots:
     void on_startTimeEdit_editingFinished();
     void on_endTimeEdit_editingFinished();
 
+    void on_actionScore_triggered(bool checked);
 };
 
 #endif // TRAJECTORYVISUALIZER_H

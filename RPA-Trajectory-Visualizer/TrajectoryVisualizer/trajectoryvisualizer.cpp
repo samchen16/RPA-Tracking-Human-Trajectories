@@ -10,10 +10,11 @@ TrajectoryVisualizer::TrajectoryVisualizer(QWidget *parent) :
     ui->setupUi(this);
     trajectories = new std::vector<Trajectory*>();
     pointInfo = new PointInfo(ui);
+
     graph = ui->graph;
     graph->init(pointInfo, trajectories);
+    //graph->setupScore(ui->posScoreEdit, ui->velScoreEdit);
     timeRangeFixed = false;
-
 }
 
 TrajectoryVisualizer::~TrajectoryVisualizer()
@@ -121,4 +122,16 @@ void TrajectoryVisualizer::updateView()
     ui->endTimeEdit->setText(QString::number(graphEndTime, 'f', 3));
     ui->startTimeSlider->setValue(startTime);
     ui->endTimeSlider->setValue(endTime);
+}
+
+void TrajectoryVisualizer::on_actionScore_triggered(bool checked)
+{
+    if (graph->getSelected()) {
+        QTextStream(stdout) << "view score set to " << checked << endl;
+        graph->setViewScore(checked);
+    }
+    else {
+        QTextStream(stdout) << "must first select point to view score" << endl;
+        ui->actionScore->setChecked(false);
+    }
 }

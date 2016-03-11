@@ -23,6 +23,14 @@ private:
     float endTime;
     QPolygonF* triangle;
 
+    void drawSelection(int t, int p);
+
+    // for viewing score
+    bool viewScore;
+    bool selected2;
+    std::pair<int, int>* selectedPt2;
+    void selectPoint2(int t, int p);
+    void deselectPoint2();
 
 public:
     Graph(QFrame* frame);
@@ -30,14 +38,16 @@ public:
     void init(PointInfo* pointInfo, std::vector<Trajectory*>* trajectories);
     void updateView();
 
-
     // Getters and setters
     std::pair<int, int>* getSelectedPoint() { return selectedPt; }
     float getMaxTime ();
     float getStartTime () { return startTime; }
     float getEndTime () { return endTime; }
+    bool getSelected () { return selected; }
     void setStartTime (float t);
     void setEndTime (float t);
+    void setViewScore (float b) { viewScore = b; }
+
     void selectPoint(int t, int p);
     void deselectPoint();
     void drawTriangle(Point* pos, Point* vel, QPen pen, QBrush brush, float scale = 1.0f);

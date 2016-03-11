@@ -21,15 +21,21 @@ private:
     QLineEdit* positionEditY;
     QLineEdit* velocityEditX;
     QLineEdit* velocityEditY;
-    QLineEdit* colorEditH;
-    QLineEdit* colorEditS;
-    QLineEdit* colorEditV;
     QLineEdit* timeEdit;
+
+    QLineEdit* scoreEdit;
+    QLineEdit* posScoreEdit;
+    QLineEdit* velScoreEdit;
+    float positionScore(Point* p, Point* q);
+    float velocityScore(Point* p, Point* q);
+    //void calculateScore();
+
 
 public:
     PointInfo(Ui::TrajectoryVisualizer* ui);
+
     ~PointInfo();
-    void update(int traj, Point* pos, Point* vel, Point* col, float time);
+    void update(int traj, Point* pos, Point* vel, float time);
     void clear();
 };
 

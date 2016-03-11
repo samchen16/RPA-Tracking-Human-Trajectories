@@ -18,7 +18,7 @@ void Loader::loadTrajectories(QString path, std::vector<Trajectory*>* trajectori
 
         QString info = lstLine.at(0);
 
-        if (info == "person") {
+        if (info == "traj") {
             traj = new Trajectory();
             //TODO:: give id number
 

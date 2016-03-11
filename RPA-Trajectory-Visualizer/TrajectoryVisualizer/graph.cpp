@@ -41,7 +41,9 @@ Graph::Graph(QFrame* frame) : QGraphicsView(frame)
     triangle->append(QPointF(-0.012, 0.012));
     triangle->append(QPointF(-0.012, -0.012));
     triangle->append(QPointF(0.025, 0.0));
-
+    viewScore = false;
+    selected2 = false;
+    selectedPt2 = new std::pair<int, int>();
 }
 
 Graph::~Graph()
@@ -61,19 +63,11 @@ void Graph::updateView()
     scene->clear();
     if (selected)
     {
-        QBrush selBrush = QBrush(QColor(0,255,0));
-        QPen selPen = QPen(QColor(0,255,0));
-        selPen.setCosmetic(true);
-        Point* selPos = trajectories->at(selectedPt->first)->getPosition(selectedPt->second);
-        Point* selVel = trajectories->at(selectedPt->first)->getVelocity(selectedPt->second);
-        if (DRAW_TRIANGLES)
-        {
-            drawTriangle(selPos, selVel, selPen, selBrush, 1.9f);
-        }
-        else
-        {
-            scene->addEllipse(selPos->x-SELECTED_RADIUS, selPos->y-SELECTED_RADIUS, 2*SELECTED_RADIUS, 2*SELECTED_RADIUS, selPen, selBrush);
-        }
+        drawSelection(selectedPt->first, selectedPt->second);
+    }
+    if (selected2)
+    {
+        drawSelection(selectedPt2->first, selectedPt2->second);
     }
 
     for (std::vector<Trajectory*>::iterator it = trajectories->begin(); it != trajectories->end(); ++it)
@@ -126,6 +120,22 @@ void Graph::updateView()
 
 }
 
+void Graph::drawSelection(int t, int p){
+    QBrush selBrush = QBrush(QColor(0,255,0));
+    QPen selPen = QPen(QColor(0,255,0));
+    selPen.setCosmetic(true);
+    Point* selPos = trajectories->at(t)->getPosition(p);
+    Point* selVel = trajectories->at(t)->getVelocity(p);
+    if (DRAW_TRIANGLES)
+    {
+        drawTriangle(selPos, selVel, selPen, selBrush, 1.9f);
+    }
+    else
+    {
+        scene->addEllipse(selPos->x-SELECTED_RADIUS, selPos->y-SELECTED_RADIUS, 2*SELECTED_RADIUS, 2*SELECTED_RADIUS, selPen, selBrush);
+    }
+}
+
 void Graph::drawTriangle(Point* pos, Point* vel, QPen pen, QBrush brush, float scale)
 {
     double theta = atan(vel->y/vel->x);
@@ -175,13 +185,26 @@ void Graph::mouseReleaseEvent(QMouseEvent* event)
             i = i + 1;
         }
     }
-    if (trajIndex != -1 && ptIndex != -1)
-    {
-        selectPoint(trajIndex, ptIndex);
+
+    if (viewScore){
+        if (trajIndex != -1 && ptIndex != -1)
+        {
+            selectPoint2(trajIndex, ptIndex);
+        }
+        else
+        {
+            deselectPoint2();
+        }
     }
-    else
-    {
-        deselectPoint();
+    else {
+        if (trajIndex != -1 && ptIndex != -1)
+        {
+            selectPoint(trajIndex, ptIndex);
+        }
+        else
+        {
+            deselectPoint();
+        }
     }
     updateView();
 }
@@ -197,15 +220,29 @@ void Graph::deselectPoint()
 
 void Graph::selectPoint(int t, int p)
 {
-    //QTextStream(stdout) << "selected point " << QString::number(t) << " " << QString::number(p) << endl;
+    QTextStream(stdout) << "selected point " << QString::number(t) << " " << QString::number(p) << endl;
     selected = true;
     selectedPt->first = t;
     selectedPt->second = p;
     Point* pos = trajectories->at(t)->getPosition(p);
     Point* vel = trajectories->at(t)->getVelocity(p);
-    Point* col = trajectories->at(t)->getColor(p);
     float time = trajectories->at(t)->getTime(p);
-    pointInfo->update(t, pos, vel, col, time);
+    pointInfo->update(t, pos, vel, time);
+    updateView();
+}
+
+void Graph::selectPoint2(int t, int p)
+{
+    selected2 = true;
+    selectedPt2->first = t;
+    selectedPt2->second = p;
+    updateView();
+}
+
+void Graph::deselectPoint2() {
+    selected2 = false;
+    selectedPt2->first = -1;
+    selectedPt2->second = -1;
     updateView();
 }
 
@@ -263,3 +300,4 @@ void Graph::wheelEvent(QWheelEvent *event)
         this->scale(1.0/SCALE_INCREMENT, 1.0/SCALE_INCREMENT);
     }
 }
+
