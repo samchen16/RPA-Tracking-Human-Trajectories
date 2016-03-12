@@ -237,6 +237,7 @@ void Graph::selectPoint2(int t, int p)
     selectedPt2->first = t;
     selectedPt2->second = p;
     updateView();
+    pointInfo->updateScore(trajectories, selectedPt, selectedPt2);
 }
 
 void Graph::deselectPoint2() {
@@ -244,6 +245,7 @@ void Graph::deselectPoint2() {
     selectedPt2->first = -1;
     selectedPt2->second = -1;
     updateView();
+    pointInfo->clearScore();
 }
 
 void Graph::mouseMoveEvent(QMouseEvent *event)

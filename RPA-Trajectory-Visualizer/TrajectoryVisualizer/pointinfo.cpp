@@ -1,5 +1,6 @@
 #include "pointinfo.h"
 #include "trajectory.h"
+#include <math.h>
 
 PointInfo::PointInfo(Ui::TrajectoryVisualizer* ui)
 {
@@ -40,6 +41,40 @@ void PointInfo::clear()
     timeEdit->setText("");
 }
 
+void PointInfo::updateScore(std::vector<Trajectory*>* trajectories, std::pair<int, int>* selPt, std::pair<int, int>* selPt2)
+{
+    Point* pos1 = trajectories->at(selPt->first)->getPosition(selPt->second);
+    Point* vel1 = trajectories->at(selPt->first)->getVelocity(selPt->second);
+    float t1 = trajectories->at(selPt->first)->getTime(selPt->second);
+
+    // find index of the trajectory that happened right before t1
+    Trajectory* traj2 = trajectories->at(selPt2->first);
+    int index2 = -1;
+    int size = traj2->getTimes()->size();
+    for(int i = 0; i < size; i++){
+        float t2 = traj2->getTime(i);
+        if (t1 > t2) {
+            index2++;
+        }
+    }
+    Point* pos2 = traj2->getPosition(index2);
+    Point* vel2 = traj2->getVelocity(index2);
+    float posScore = positionScore(pos1, pos2);
+    float velScore = velocityScore(vel1, vel2);
+    float score = posScore + velScore;
+
+    scoreEdit->setText(QString::number(score, 'f', 3));
+    posScoreEdit->setText(QString::number(posScore, 'f', 3));
+    velScoreEdit->setText(QString::number(velScore, 'f', 3));
+}
+
+void PointInfo::clearScore()
+{
+    scoreEdit->setText("");
+    posScoreEdit->setText("");
+    velScoreEdit->setText("");
+}
+
 float PointInfo::positionScore(Point* p, Point* q) {
     float x = p->x - q->x;
     float y = p->y - q->y;
@@ -48,21 +83,11 @@ float PointInfo::positionScore(Point* p, Point* q) {
     return dist;
 
 }
-float PointInfo::velocityScore(Point* p, Point* q) {
-    return 1.0f;
+
+float PointInfo::velocityScore(Point* vel1, Point* vel2) {
+    double vel1DotVel2 = vel1->x*vel2->x + vel1->y*vel2->y + vel1->z*vel2->z;
+    double vel1Mag = sqrt(vel1->x*vel1->x + vel1->y*vel1->y + vel1->z*vel1->z);
+    double vel2Mag = sqrt(vel2->x*vel2->x + vel2->y*vel2->y + vel2->z*vel2->z);
+    float velScore = -1.0f * ((float) (acos(vel1DotVel2 / (vel1Mag * vel2Mag))));
+    return velScore;
 }
-
-/*void PointInfo::calculateScore() {
-    Point* pos1 = trajectories->at(selectedPt->first)->getPosition(selectedPt->second);
-    Point* vel1 = trajectories->at(selectedPt->first)->getVelocity(selectedPt->second);
-    Point* pos2 = trajectories->at(selectedPt2->first)->getPosition(selectedPt2->second);
-    Point* vel2 = trajectories->at(selectedPt2->first)->getVelocity(selectedPt2->second);
-    float posScore = positionScore(pos1, pos2);
-    float velScore = velocityScore(vel1, vel2);
-    float score = posScore + velScore;
-
-    scoreEdit->setText(QString::number(score, 'f', 3));
-    posScoreEdit->setText(QString::number(posScore, 'f', 3));
-    velScoreEdit->setText(QString::number(velScore, 'f', 3));
-}*/
-

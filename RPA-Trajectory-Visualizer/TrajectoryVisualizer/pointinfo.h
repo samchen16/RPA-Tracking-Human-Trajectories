@@ -26,10 +26,9 @@ private:
     QLineEdit* scoreEdit;
     QLineEdit* posScoreEdit;
     QLineEdit* velScoreEdit;
+
     float positionScore(Point* p, Point* q);
     float velocityScore(Point* p, Point* q);
-    //void calculateScore();
-
 
 public:
     PointInfo(Ui::TrajectoryVisualizer* ui);
@@ -37,6 +36,8 @@ public:
     ~PointInfo();
     void update(int traj, Point* pos, Point* vel, float time);
     void clear();
+    void updateScore(std::vector<Trajectory*>* trajectories, std::pair<int, int>* selPt, std::pair<int, int>* selPt2);
+    void clearScore();
 };
 
 #endif // POINTINFO_H
