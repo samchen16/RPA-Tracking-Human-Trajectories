@@ -1,0 +1,46 @@
+//
+//  histogram.h
+//  Histogram
+//
+
+#ifndef __Histogram__
+#define __Histogram__
+
+#include <pcl/point_types.h>
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <pcl/point_types_conversion.h>
+#include <iostream>
+#include <stdio.h>
+#include "util.h"
+
+typedef pcl::PointXYZRGBA PointT;
+typedef pcl::PointCloud<PointT> PointCloudT;
+
+
+
+class Histogram {
+private:
+
+    int id;
+    std::vector<Point*>* positions;
+    std::vector<Point*>* velocities;
+    std::vector<Point*>* colors;
+    std::vector<float>* times;
+
+    Mat* matrix;
+
+public:
+    
+    Histogram();
+    ~Histogram();
+
+    int getID() { return id; }
+    
+    void setPointCloud(PointCloudT::Ptr cloud);
+    void setMatrix(cv::Mat* mat) { matrix = mat; }
+};
+
+
+#endif /* defined(__Histogram__) */

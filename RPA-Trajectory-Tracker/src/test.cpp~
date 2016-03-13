@@ -1,0 +1,19 @@
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
+
+#include "util.h"
+
+typedef pcl::PointXYZRGBA PointT;
+typedef pcl::PointCloud<PointT> PointCloudT;
+
+
+
+ 
+int main (int argc, char** argv) {
+
+    PointCloudT::Ptr cloud (new PointCloudT);
+    pcl::io::loadPCDFile<PointT> ("data2_edit/60.pcd", *cloud) 
+ 
+
+    return 0;
+}
