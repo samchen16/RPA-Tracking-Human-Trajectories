@@ -56,6 +56,8 @@ void signal_callback_handler(int sig)
 
 int main (int argc, char** argv) {
     
+    // the first pointcloud loaded is data/<pc_folder> + <pc_start> + .pcd
+    // the last pointcloud loaded is data/<pc_folder> + <pc_finish> + .pcd
     std::string pc_folder = "twoperson";
     int pc_start = 415;;
     int pc_finish = 450;
