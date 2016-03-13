@@ -196,6 +196,6 @@ int main (int argc, char** argv) {
     save_trajectories(tracker->getFinished(), filepath_finished.c_str());        
     save_trajectories(tracker->getTrajectories(), filepath_trajectories.c_str());
     save_trajectories(tracker->getTrajectories(), filepath_all.c_str());
-save_trajectories(tracker->getFinished(), filepath_all.c_str());
+    save_trajectories(tracker->getFinished(), filepath_all.c_str());
     return 0;
 }

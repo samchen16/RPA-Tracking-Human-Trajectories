@@ -57,7 +57,7 @@ void signal_callback_handler(int sig)
 int main (int argc, char** argv) {
     
     std::string pc_folder = "twoperson";
-    int pc_start = 415; //55;
+    int pc_start = 415;;
     int pc_finish = 450;
 
     if (argc > 1) {
