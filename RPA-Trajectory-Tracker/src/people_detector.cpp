@@ -181,7 +181,7 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
         if(it->getPersonConfidence() > -1.8) {                
             it->drawTBoundingBox(*viewer, k);
             k++;      
-            std::cout << it->getPersonConfidence() << std::endl;
+            
         }
             /*PointCloudT::Ptr out (new PointCloudT);
             pcl::copyPointCloud (*cloud_filtered, it->getIndices().indices, *out);

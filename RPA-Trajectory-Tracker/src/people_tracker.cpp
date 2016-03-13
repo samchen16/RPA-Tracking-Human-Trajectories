@@ -27,13 +27,6 @@ PeopleTracker::~PeopleTracker()
 void PeopleTracker::track() 
 {
 
-    //for (int i = 0; i < clusters->size(); i++) {
-        //if (clusters->at(i)->getConfidence() >= person_confidence) {
-            //std::cout << clusters->at(i)->getConfidence() << std::endl;
-            //display_histogram_2D(*(clusters->at(i)->getColor()));
-        //}
-    //}
-
     // Set all trajectories to inactive
     for (int k = 0; k < trajectories->size(); k++)
     {   
@@ -106,7 +99,6 @@ float PeopleTracker::velocityScore(Trajectory* traj, ClusterData* cd) {
     else if (approxIndex < 0) {
         approxIndex = 0;
     }
-    std::cout << approxIndex << std::endl;
     Point pos1 = *(traj->getPosition());          
     Point vel1 = *(traj->getVelocity(approxIndex));
 
@@ -248,72 +240,3 @@ void PeopleTracker::matchTrajectories()
                  
 } 
 
-/*void PeopleTracker::matchTrajectories()
-{
-    for (int i = 0; i < trajectories->size(); i++) {
-        Trajectory* traj = trajectories->at(i);
-        ClusterData* cd1 = traj->getClusterData();
-
-        minVelScore = std::numeric_limits<float>::min();
-        maxVelScore = std::numeric_limits<float>::max();
-        minColScore = std::numeric_limits<float>::min();
-        maxColScore = std::numeric_limits<float>::max();
-
-        for (int j = 0; j < clusters->size(); j++) {
-            ClusterData* cd2 = clusters->at(j);
-            if ((cd2->getConfidence() >= person_confidence && traj->isPerson()) || (cd2->getConfidence() < person_confidence && !traj->isPerson())) {
-                
-                if (cluster_distance(cd1, cd2) < 0.25)
-                {
-                    float velScore = velocityScore(traj,cd2);
-                    float colScore = colorScore(traj,cd2);
-                    float posScore = positionScore(traj,cd2);
-                    cd2->setVelocityScore(velScore);
-                    cd2->setColorScore(colScore);
-                    cd2->setPositionScore(posScore);
-                    
-                }
-            }
-        }
-
-        float best_score = 0.0;
-        int best_index = -1;
-
-        for (int j = 0; j < clusters->size(); j++) {
-            ClusterData* cd2 = clusters->at(j);
-            float normVelScore = (cd2->getVelocityScore() - minVelScore) / (maxVelScore - minVelScore);
-            float normColScore = 0.0f; //(cd2->getColorScore() - minColScore) / (maxColScore - minColScore);
-            float normPosScore = (cd2->getPositionScore() - minPosScore) / (maxPosScore - minPosScore);
-            float score =  normVelScore + normColScore + normPosScore;
-            if (score > best_score) {
-                best_score = score;
-                best_index = j;
-            }
-        }
-        
-        // no good match was found
-        if (best_index != -1)
-        {
-            ClusterData* best_cluster = clusters->at(best_index);
-            Point pos = best_cluster->getPosition();
-            traj->setClusterData(best_cluster);
-            traj->addPoint(pos.x, pos.y, pos.z, current_time);
-            traj->setActive(true);
-            clusters->erase(clusters->begin() + best_index);                
-        }
- 
-    }
-    
-    // Create a new trajectory for each leftover cluster
-    for (int i = 0; i < clusters->size(); i++) {
-        ClusterData* cd = clusters->at(i);        
-        Trajectory* new_traj = new Trajectory();                
-        Point pos = cd->getPosition();
-        new_traj->addPoint(pos.x, pos.y, pos.z, current_time);
-        new_traj->setIsPerson(cd->getConfidence() > person_confidence);
-        new_traj->setClusterData(cd);
-        trajectories->push_back(new_traj);
-    }
-        
-} 
-*/

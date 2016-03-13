@@ -61,6 +61,7 @@ int main (int argc, char** argv) {
     std::string pc_folder = "twoperson";
     int pc_start = 415;;
     int pc_finish = 450;
+    bool visualizeOn = true;
 
     if (argc > 1) {
       pc_folder = argv[1];
@@ -173,16 +174,16 @@ int main (int argc, char** argv) {
         tracker->setClusterData(detector->getClusterData());
         // modify trajectories            
         tracker->track();
-                    
+
+        std::cout << "Processing pointcloud: " << pc_num << std::endl;                                          
         // draw lines from previous position to current position
-        //drawTrajectories(viewer, tracker->getTrajectories());
-
-        // Update display
-        std::cout << "Displaying pointcloud: " << pc_num << std::endl;              
-        //pcl::visualization::PointCloudColorHandlerRGBField<PointT> rgb(detector->getCloudMain());                       
-        //viewer->addPointCloud<PointT> (detector->getCloudMain(), rgb, "cloud_filtered");
-        //viewer->spinOnce();        
-
+        if (visualizeOn) {
+          drawTrajectories(viewer, tracker->getTrajectories());
+          // Update display
+          pcl::visualization::PointCloudColorHandlerRGBField<PointT> rgb(detector->getCloudMain());                       
+          viewer->addPointCloud<PointT> (detector->getCloudMain(), rgb, "cloud_filtered");
+          viewer->spinOnce();        
+        }
         /*std::string input = "n";
         cin >> input;
         if (input == "m") {
