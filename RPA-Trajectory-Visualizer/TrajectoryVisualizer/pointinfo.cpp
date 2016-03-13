@@ -58,9 +58,12 @@ void PointInfo::updateScore(std::vector<Trajectory*>* trajectories, std::pair<in
         }
     }
     Point* pos2 = traj2->getPosition(index2);
-    Point* vel2 = traj2->getVelocity(index2);
     float posScore = positionScore(pos1, pos2);
-    float velScore = velocityScore(vel1, vel2);
+    float velScore = 1.0f;
+    if (index2 > 1) {
+        Point* vel2 = traj2->getVelocity(index2-1);
+        velScore = velocityScore(vel1, vel2);
+    }
     float score = posScore + velScore;
 
     scoreEdit->setText(QString::number(score, 'f', 3));
@@ -88,6 +91,6 @@ float PointInfo::velocityScore(Point* vel1, Point* vel2) {
     double vel1DotVel2 = vel1->x*vel2->x + vel1->y*vel2->y + vel1->z*vel2->z;
     double vel1Mag = sqrt(vel1->x*vel1->x + vel1->y*vel1->y + vel1->z*vel1->z);
     double vel2Mag = sqrt(vel2->x*vel2->x + vel2->y*vel2->y + vel2->z*vel2->z);
-    float velScore = -1.0f * ((float) (acos(vel1DotVel2 / (vel1Mag * vel2Mag))));
+    float velScore = fabs( ((float) (acos(vel1DotVel2 / (vel1Mag * vel2Mag)))));
     return velScore;
 }
