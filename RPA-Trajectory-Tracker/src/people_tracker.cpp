@@ -4,6 +4,7 @@
 //
 
 #include "people_tracker.h"
+#include "constants.h"
 #include <math.h>
 #include <limits>
 #include <set>
@@ -14,8 +15,8 @@ PeopleTracker::PeopleTracker()
     trajectories = new std::vector<Trajectory*>();
     finished = new std::vector<Trajectory*>();
     current_time = 0.0; 
-    person_confidence = -1.8f;
-    num_frames = 6;
+    person_confidence = MIN_PERSON_CONFIDENCE;
+    num_frames = MAX_FRAMES_INACTIVE;
 }
 
 PeopleTracker::~PeopleTracker() 

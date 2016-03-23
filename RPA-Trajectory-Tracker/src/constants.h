@@ -13,14 +13,29 @@
 typedef pcl::PointXYZRGBA PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
 
-// Default values for people detector
-#define DEFAULT_SVM_PATH "data/trainedLinearSVMForPeopleDetectionWithHOG.yaml"
-#define DEFAULT_MIN_CONFIDENCE -3.5f //-0.6f 
-#define DEFAULT_MIN_HEIGHT 0.4f //1.3;
-#define DEFAULT_MAX_HEIGHT 2.7f //2.3;
-#define DEFAULT_MIN_WIDTH 0.2f
-#define DEFAULT_MAX_WIDTH 2.0f
-#define DEFAULT_VOXEL_SIZE 0.1f //0.06f
+
+// People Tracker
+#define MIN_CLUSTER_DIST 0.2f
+#define MAX_FRAMES_INACTIVE 6
+#define MIN_PERSON_CONFIDENCE -1.8f
+
+// People Detector
+#define SVM_PATH "data/trainedLinearSVMForPeopleDetectionWithHOG.yaml"
+// thresholds for plane removal
+#define PLANE_REMOVAL_DIST_THRESH 0.1
+// thresholds for statistical outlier removal
+#define OUTLIER_REMOVAL_NUM_POINTS 30
+#define OUTLIER_REMOVAL_STD_DEV 1.0
+// thresholds for euclidean clustering 
+#define EUCLIDEAN_CLUSTERING_DIST_THRESH 0.1f
+#define EUCLIDEAN_CLUSTERING_MIN_CLUSTER 300  
+#define EUCLIDEAN_CLUSTERING_MAX_CLUSTER 500000
+// thresholds for person subclustering
+#define MIN_SUBCLUSTER 300
+#define MAX_SUBCLUSTER 500000 
+#define MIN_PERSON_HEIGHT 1.3f 
+#define MAX_PERSON_HEIGHT 2.3f 
+#define MIN_HEAD_DIST 0.1f
 
 // Kinect for Windows Specs
 #define HORIZONTAL_FOV 57.0f
@@ -29,18 +44,8 @@ typedef pcl::PointCloud<PointT> PointCloudT;
 #define KINECT_MAX_Z 4.0f
 
 // Histogram
-#define NUM_HUE_BINS 180//60
-#define NUM_SAT_BINS 255 //80
+#define NUM_HUE_BINS 180
+#define NUM_SAT_BINS 255
 
-// People Tracker
-#define MIN_PERSON_CONFIDENCE -0.165f
-#define MIN_CLUSTER_DIST 0.2f
-
-// People Detector
-#define MIN_CLUSTER_SIZE 70
-#define MIN_SUBCLUSTER_SIZE 30
-#define MAX_SUBCLUSTER_SIZE 100000
-#define MIN_PERSON_HEIGHT 1.1
-#define MAX_PERSON_HEIGHT 2.3
 
 #endif

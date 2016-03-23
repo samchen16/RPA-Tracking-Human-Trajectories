@@ -40,28 +40,27 @@ PeopleDetector::PeopleDetector() {
 
     // Create person classifier
     person_classifier = new pcl::people::PersonClassifier<pcl::RGB>();
-    person_classifier->loadSVMFromFile(DEFAULT_SVM_PATH);
+    person_classifier->loadSVMFromFile(SVM_PATH);
  
     name_num = 0;
 
     clusters = new std::vector<ClusterData*>(); 
-    
 
     // thresholds for plane removal
-    _plane_dist_thresh = 0.1;
+    _plane_dist_thresh = PLANE_REMOVAL_DIST_THRESH;
     // thresholds for statistical outlier removal
-    _num_points = 30;
-    _std_dev = 1.0;
+    _num_points = OUTLIER_REMOVAL_NUM_POINTS;
+    _std_dev = OUTLIER_REMOVAL_STD_DEV;
     // thresholds for euclidean clustering 
-    _euclidean_dist_thresh = 0.1f;
-    _min_cluster = 300;  
-    _max_cluster = 500000;
+    _euclidean_dist_thresh = EUCLIDEAN_CLUSTERING_DIST_THRESH;
+    _min_cluster = EUCLIDEAN_CLUSTERING_MIN_CLUSTER;  
+    _max_cluster = EUCLIDEAN_CLUSTERING_MAX_CLUSTER;
     // thresholds for person subclustering
-    _min_subcluster = 300; 
-    _max_subcluster = 500000; 
-    _min_person_height = 1.3f; 
-    _max_person_height = 2.3f; 
-    _min_head_dist = 0.1f;
+    _min_subcluster = MIN_SUBCLUSTER; 
+    _max_subcluster = MAX_SUBCLUSTER; 
+    _min_person_height = MIN_PERSON_HEIGHT; 
+    _max_person_height = MAX_PERSON_HEIGHT; 
+    _min_head_dist = MIN_HEAD_DIST;
 
 
 }
@@ -183,17 +182,7 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
             k++;      
             
         }
-            /*PointCloudT::Ptr out (new PointCloudT);
-            pcl::copyPointCloud (*cloud_filtered, it->getIndices().indices, *out);
-            std::ostringstream ss;
-            ss << "data2/" << name_num << ".pcd";
-            std::string name = ss.str();
-            save_pointcloud(name, out);
-            name_num = name_num + 1;*/
      }
-    
-
-
 }
 
 void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr viewer, Eigen::VectorXf ground_coeffs) {
@@ -241,34 +230,6 @@ void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr view
     mps.setInputCloud (cloud_filtered);
     mps.setInputNormals (cloud_normals);
     mps.segmentAndRefine (regions, model_coefficients, inlier_indices, labels, label_indices, boundary_indices);
-
-    
-    /*//
-    std::vector<bool> plane_labels;
-    plane_labels.resize (label_indices.size (), false);    
-    pcl::PointIndices::Ptr plane_indices_ptr (new pcl::PointIndices);
-    for (int i = 0; i < label_indices.size (); i++) {
-        if (label_indices[i].indices.size () > 1) {
-            plane_labels[i] = true;
-        }
-    }
-    
-    // for display
-    pcl::PointIndices::Ptr li_ptr (new pcl::PointIndices);     
-    for (int i = 0; i < label_indices.size (); i++) {
-        if (label_indices[i].indices.size () > 1) {
-            for (int j = 0; j < label_indices[i].indices.size (); j++) {
-                li_ptr->indices.push_back(label_indices[i].indices.at(j));
-            }
-        }
-    }
-    pcl::ExtractIndices<PointT> extract;
-    extract.setInputCloud (cloud_filtered);    
-    extract.setIndices (li_ptr);
-    extract.setNegative (true);
-    extract.filter (*cloud_with_no_planes);
-    //*/
-
     
     std::vector<pcl::PointIndices> plane_indices;
     
