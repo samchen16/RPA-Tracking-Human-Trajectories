@@ -92,8 +92,6 @@ void Graph::updateView()
                 else {
                     pen = QPen(QColor(255,0,0));
                     brush = QBrush(QColor(255,0,0));
-
-                    break;
                 }
                 pen.setCosmetic(true);
                 if (DRAW_TRIANGLES)
