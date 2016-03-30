@@ -340,7 +340,7 @@ void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr view
         ClusterData* cd = new ClusterData(&(*it), cloud_filtered);
         clusters->push_back(cd);    
             
-        if(it->getPersonConfidence() > -2.5) {                
+        if(it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {                
             it->drawTBoundingBox(*viewer, k);
             k++;      
             //std::cout << it->getPersonConfidence() << std::endl;

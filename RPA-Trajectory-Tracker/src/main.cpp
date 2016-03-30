@@ -61,7 +61,7 @@ int main (int argc, char** argv) {
     std::string pc_folder = "twoperson";
     int pc_start = 415;;
     int pc_finish = 450;
-    bool visualizeOn = false;
+    bool visualizeOn = true;
 
     if (argc > 1) {
       pc_folder = argv[1];

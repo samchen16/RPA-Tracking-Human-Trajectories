@@ -169,8 +169,8 @@ void PeopleTracker::matchTrajectories()
     for (int j = 0; j < clusters->size(); j++) {
         float normPosScore = (scores[i][j][0] - minPosScore) / (maxPosScore - minPosScore);            
         float normVelScore = (scores[i][j][1] - minVelScore) / (maxVelScore - minVelScore);
-        float normColScore = 0.0f; //(scores[i][j][2] - minColScore) / (maxColScore - minColScore);
-        normScores[i][j] =  normVelScore + normColScore + normPosScore;
+        float normColScore = (scores[i][j][2] - minColScore) / (maxColScore - minColScore);
+        normScores[i][j] =  normVelScore + normColScore + 0.0f * normPosScore;
      }
   }
 

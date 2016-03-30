@@ -17,9 +17,9 @@ typedef pcl::PointCloud<PointT> PointCloudT;
 // People Tracker
 #define MIN_CLUSTER_DIST 0.2f
 #define MAX_FRAMES_INACTIVE 6
-#define MIN_PERSON_CONFIDENCE -1.8f
 
 // People Detector
+#define MIN_PERSON_CONFIDENCE -2.0f
 #define SVM_PATH "data/trainedLinearSVMForPeopleDetectionWithHOG.yaml"
 // thresholds for plane removal
 #define PLANE_REMOVAL_DIST_THRESH 0.1
