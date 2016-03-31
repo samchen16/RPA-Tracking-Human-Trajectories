@@ -118,6 +118,7 @@ int main (int argc, char** argv) {
             lists_of_3_points.push_back(clicked_points_indices);
         }
     }
+    std::cout << "size of clicked points: " << clicked_points_3d->points.size() << "\n";
     pcl::SampleConsensusModelPlane<PointT> model_plane(clicked_points_3d);
     //model_plane.computeModelCoefficients(clicked_points_indices,ground_coeffs);
         
@@ -196,7 +197,9 @@ int main (int argc, char** argv) {
     std::string filepath_finished = "data/finished.txt";
     std::string filepath_trajectories = "data/trajectories.txt";
     std::string filepath_all = "data/all.txt";    
+    std::cout << "Found " << tracker->getFinished()->size() << " finished trajectories! " << std::endl;
     save_trajectories(tracker->getFinished(), filepath_finished.c_str());        
+    std::cout << "Found " << tracker->getTrajectories()->size() << " unfinished trajectories! " << std::endl;
     save_trajectories(tracker->getTrajectories(), filepath_trajectories.c_str());
     save_trajectories(tracker->getTrajectories(), filepath_all.c_str());
     save_trajectories(tracker->getFinished(), filepath_all.c_str());

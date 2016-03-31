@@ -9,6 +9,7 @@
 #include <limits>
 #include <set>
 #include <algorithm>
+#include <iostream>
 
 PeopleTracker::PeopleTracker() 
 {
@@ -37,6 +38,8 @@ void PeopleTracker::track()
 
     // first case - nothing being tracked yet
     if (trajectories->size() == 0) {
+        std::cout << "Creating new trajectory for each cluster..." << std::endl;
+        std::cout << "Number of clusters: " << clusters->size() << std::endl;
         // just create a new trajectory for each cluster
         for (int i = 0; i < clusters->size(); i++) {
             ClusterData* cd = clusters->at(i);
@@ -46,10 +49,15 @@ void PeopleTracker::track()
             traj->addPoint(pos.x, pos.y, pos.z, current_time);
             traj->setClusterData(cd);
             // can only use person confidence to determine whether the cluster is a person or obstacle
-            traj->setIsPerson(cd->getConfidence() > person_confidence);
+            //traj->setIsPerson(cd->getConfidence() > person_confidence);
+            std::cout << "pretending this cluster is a person..." << std::endl;
+            traj->setIsPerson(true);
             trajectories->push_back(traj);  
+            std::cout << "Trajectory created for cluster " << i << std::endl;
         }
         return;
+    } else {
+        std::cout << "wat why are there no clusters" << std::endl;
     }
 
     // second case
@@ -60,16 +68,14 @@ void PeopleTracker::track()
         Trajectory* t = *it;			
         if (t->isActive()) {
             t->setFramesInactive(0);
-        }
-        else {
+        } else {
             t->setFramesInactive(t->getFramesInactive() + 1);
         } 
 
         if (t->getFramesInactive() > num_frames) {
             finished->push_back(t);
             it = trajectories->erase(it);
-        }
-        else {
+        } else {
             ++it;
         }
     }
@@ -177,7 +183,7 @@ void PeopleTracker::matchTrajectories()
   std::set<int> matchedTrajs;
   std::set<int> matchedClusters;
   int maxIter = std::min(trajectories->size(), clusters->size());
-  float distThresh = 0.25f;
+  float distThresh = MIN_CLUSTER_DIST;
 
   for (int it = 0; it < maxIter; it++) {  
 
@@ -234,7 +240,9 @@ void PeopleTracker::matchTrajectories()
       Trajectory* new_traj = new Trajectory();                
       Point pos = cd->getPosition();
       new_traj->addPoint(pos.x, pos.y, pos.z, current_time);
-      new_traj->setIsPerson(cd->getConfidence() > person_confidence);
+      //new_traj->setIsPerson(cd->getConfidence() > person_confidence);
+      std::cout << "pretending this cluster is a person..." << std::endl;
+      new_traj->setIsPerson(true);
       new_traj->setClusterData(cd);
       trajectories->push_back(new_traj);
   }

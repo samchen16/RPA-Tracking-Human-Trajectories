@@ -2,10 +2,12 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QTextStream>
+#include <iostream>
 
 void Loader::loadTrajectories(QString path, std::vector<Trajectory*>* trajectories)
 {
-    QFile inputFile(":/input.txt");
+    QFile inputFile(path + "/input.txt");
+    std::cout << "is this even running" << std::endl;
     //QFile inputFile(path);
     inputFile.open(QIODevice::ReadOnly);
 
@@ -13,6 +15,7 @@ void Loader::loadTrajectories(QString path, std::vector<Trajectory*>* trajectori
     Trajectory* traj;
     while (!in.atEnd())
     {
+        std::cout << "reading a line of fiel" << std::endl;
         QString line = in.readLine(); //read one line at a time
         QStringList lstLine = line.split(" ");
 

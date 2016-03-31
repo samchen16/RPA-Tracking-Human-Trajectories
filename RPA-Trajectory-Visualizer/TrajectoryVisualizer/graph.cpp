@@ -8,6 +8,7 @@
 #include <QPen>
 #include <QColor>
 #include <math.h>
+#include <iostream>
 
 #define POINT_RADIUS 0.01f//2.5f
 #define SELECTED_RADIUS (2*POINT_RADIUS)
@@ -72,6 +73,7 @@ void Graph::updateView()
 
     for (std::vector<Trajectory*>::iterator it = trajectories->begin(); it != trajectories->end(); ++it)
     {
+        std::cout << "rendering a trajectory" << std::endl;
         Trajectory* traj = *it;
         int i = 0;
         int num = traj->getTimes()->size();
