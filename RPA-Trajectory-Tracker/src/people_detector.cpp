@@ -95,7 +95,7 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
     // Downsample (cloud_filtered)
     //Downsample::organized_downsample(cloud, cloud_main, 2, 2);
     //Downsample::organized_downsample(cloud, cloud_filtered, 2, 2);
-    float LEAF_SIZE = 0.6;
+    float LEAF_SIZE = 0.05;
     Downsample::voxelGrid(cloud, cloud_main, LEAF_SIZE);  
     Downsample::voxelGrid(cloud, cloud_filtered, LEAF_SIZE);  
     //*cloud_main = *cloud_filtered; 
@@ -339,7 +339,7 @@ void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr view
         ClusterData* cd = new ClusterData(&(*it), cloud_filtered);
         clusters->push_back(cd);    
             
-        if(it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {                
+        if (it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {                
             std::cout << "Found a person! Drawing bounding box..." << std::endl;
             it->drawTBoundingBox(*viewer, k);
             k++;      
