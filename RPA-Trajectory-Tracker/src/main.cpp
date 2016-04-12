@@ -99,6 +99,8 @@ int main (int argc, char** argv) {
     temp_viewer->registerPointPickingCallback (pp_callback, (void*)&cb_args);
     std::cout << "Shift+click on three floor points, then press 'Q'..." << std::endl;
 
+
+    /*
     // Spin until 'Q' is pressed:
     temp_viewer->spin();
     std::cout << "done." << std::endl;
@@ -118,8 +120,10 @@ int main (int argc, char** argv) {
             lists_of_3_points.push_back(clicked_points_indices);
         }
     }
+
     pcl::SampleConsensusModelPlane<PointT> model_plane(clicked_points_3d);
     //model_plane.computeModelCoefficients(clicked_points_indices,ground_coeffs);
+
         
     model_plane.computeModelCoefficients(lists_of_3_points.at(0),ground_coeffs);
     std::cout << "Ground plane: " << ground_coeffs(0) << " " << ground_coeffs(1) << " " << ground_coeffs(2) << " " << ground_coeffs(3) << std::endl;
@@ -128,6 +132,20 @@ int main (int argc, char** argv) {
     //pcl::PointCloud<PointT>::Ptr ground (new pcl::PointCloud<PointT> ());
     //pcl::copyPointCloud<PointT>(*cloud, inliers, *ground); 
     //save_pointcloud("ground.pcd", ground);
+
+    //-49.9395 51.8459 95.8488
+    //-67.9796 102.376 241.313
+    //-27.3068 106.288 202.085
+    //Ground plane: -0.412999 0.843213 -0.344128 -31.3578
+    */
+    
+    Eigen::VectorXf ground_coeffs;
+    ground_coeffs.resize(4);
+    ground_coeffs(0) = -0.412999;
+    ground_coeffs(1) = 0.843213;
+    ground_coeffs(2) = -0.344128;
+    ground_coeffs(3) = -31.3578;
+    
     
 
     // Initialize viewer
@@ -196,7 +214,9 @@ int main (int argc, char** argv) {
     std::string filepath_finished = "data/finished.txt";
     std::string filepath_trajectories = "data/trajectories.txt";
     std::string filepath_all = "data/all.txt";    
+    std::cout << "Found " << tracker->getFinished()->size() << " finished trajectories! " << std::endl;
     save_trajectories(tracker->getFinished(), filepath_finished.c_str());        
+    std::cout << "Found " << tracker->getTrajectories()->size() << " unfinished trajectories! " << std::endl;
     save_trajectories(tracker->getTrajectories(), filepath_trajectories.c_str());
     save_trajectories(tracker->getTrajectories(), filepath_all.c_str());
     save_trajectories(tracker->getFinished(), filepath_all.c_str());

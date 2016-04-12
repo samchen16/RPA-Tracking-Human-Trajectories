@@ -27,7 +27,7 @@ TrajectoryVisualizer::~TrajectoryVisualizer()
 void TrajectoryVisualizer::loadFile()
 {
     QTextStream(stdout) << "load file" << endl;
-    Loader::loadTrajectories("test", trajectories);
+    Loader::loadTrajectories("/home/occam/RPA-Tracking-Human-Trajectories/RPA-Trajectory-Tracker/data", trajectories);
     graph->setStartTime(0.0f);
     graph->setEndTime(graph->getMaxTime());
     updateView();

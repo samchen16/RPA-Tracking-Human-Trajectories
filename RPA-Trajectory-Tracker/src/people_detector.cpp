@@ -66,8 +66,7 @@ PeopleDetector::PeopleDetector() {
 }
 
 PeopleDetector::~PeopleDetector() {
-    delete[] all_indices;    
-     
+    delete[] all_indices;
 }
 
 void PeopleDetector::clear() {
@@ -96,8 +95,9 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
     // Downsample (cloud_filtered)
     //Downsample::organized_downsample(cloud, cloud_main, 2, 2);
     //Downsample::organized_downsample(cloud, cloud_filtered, 2, 2);
-    Downsample::voxelGrid(cloud, cloud_main, 0.02);  
-    Downsample::voxelGrid(cloud, cloud_filtered, 0.02);  
+    float LEAF_SIZE = 0.05;
+    Downsample::voxelGrid(cloud, cloud_main, LEAF_SIZE);  
+    Downsample::voxelGrid(cloud, cloud_filtered, LEAF_SIZE);  
     //*cloud_main = *cloud_filtered; 
 
     // Deal with ground 
@@ -143,7 +143,7 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
     ec.setSearchMethod(tree);
     ec.setInputCloud(cloud_main);
     ec.extract(*all_indices);
-    //displayClusters (all_indices, viewer, cloud_main);
+    displayClusters (all_indices, viewer, cloud_main);
     
     // Head based sub-clustering 
     std::vector<pcl::people::PersonCluster<PointT> > headbased_clusters;
@@ -163,7 +163,7 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
     
     //Evaluate confidence for the current PersonCluster
     int k = 0;              
-    for(std::vector<pcl::people::PersonCluster<PointT> >::iterator it = headbased_clusters.begin(); it != headbased_clusters.end(); ++it) {
+    for (std::vector<pcl::people::PersonCluster<PointT> >::iterator it = headbased_clusters.begin(); it != headbased_clusters.end(); ++it) {
         Eigen::Vector3f centroid = rgb_intrinsics_matrix * (it->getTCenter());
         centroid /= centroid(2);
         Eigen::Vector3f top = rgb_intrinsics_matrix * (it->getTTop());
@@ -174,13 +174,11 @@ void PeopleDetector::unorganizedDetect(pcl::visualization::PCLVisualizer::Ptr vi
         
         ClusterData* cd = new ClusterData(&(*it), cloud_main);
         clusters->push_back(cd);    
-        //it->drawTBoundingBox(*viewer, k);
-        //k++;      
-              
-        if(it->getPersonConfidence() > -1.8) {                
+
+        if (it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {
+            std::cout << "Found a person! Drawing bounding box..." << std::endl;
             it->drawTBoundingBox(*viewer, k);
             k++;      
-            
         }
      }
 }
@@ -304,6 +302,7 @@ void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr view
     euclidean_segmentation.segment (euclidean_labels, euclidean_label_indices);
 
     for (size_t i = 0; i < euclidean_label_indices.size (); i++) {
+        std::cout << "Evaluating cluster of size " << euclidean_label_indices[i].indices.size () << std::endl;
         if (euclidean_label_indices[i].indices.size () > _min_cluster) {
             all_indices->push_back(euclidean_label_indices[i]);
         }    
@@ -340,10 +339,10 @@ void PeopleDetector::organizedDetect(pcl::visualization::PCLVisualizer::Ptr view
         ClusterData* cd = new ClusterData(&(*it), cloud_filtered);
         clusters->push_back(cd);    
             
-        if(it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {                
+        if (it->getPersonConfidence() > MIN_PERSON_CONFIDENCE) {                
+            std::cout << "Found a person! Drawing bounding box..." << std::endl;
             it->drawTBoundingBox(*viewer, k);
             k++;      
-            //std::cout << it->getPersonConfidence() << std::endl;
         }
             /*PointCloudT::Ptr out (new PointCloudT);
             pcl::copyPointCloud (*cloud_filtered, it->getIndices().indices, *out);
