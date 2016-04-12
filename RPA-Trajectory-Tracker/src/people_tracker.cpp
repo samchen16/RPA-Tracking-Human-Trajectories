@@ -202,7 +202,7 @@ void PeopleTracker::matchTrajectories()
           continue;
         }
         float score = normScores[i][j];
-        if (score < bestScore && scores[i][j][0] < distThresh) {
+        if (score < bestScore && scores[i][j][0] < MIN_CLUSTER_DIST) {
           bestScore = score;
           bestTrajIndex = i;
           bestClusterIndex = j;
