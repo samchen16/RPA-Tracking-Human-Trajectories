@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 project(test)
 
-find_package(PCL 1.2 REQUIRED)
+find_package(PCL 1.2 REQUIRED PATHS /usr/share NO_DEFAULT_PATH)
 find_package(OpenCV REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
